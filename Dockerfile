@@ -20,11 +20,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get -qqy install -t stretch-backports --no-install-recommends bash openjdk-8-jre-headless ca-certificates-java supervisor procps sudo ca-certificates openssh-client mysql-server mysql-client pwgen curl git uuid-runtime parallel && \
     cd /tmp/ && \
     curl -Lo /tmp/rundeck.deb http://dl.bintray.com/rundeck/rundeck-deb/rundeck_2.10.6-1-GA_all.deb && \
-    echo '91f259838d99069ec2b80c13dd0baca54197d8cba3401dff5f7296adc6798838  rundeck.deb' > /tmp/rundeck.sig && \
-    shasum -a256 -c /tmp/rundeck.sig && \
     curl -Lo /tmp/rundeck-cli.deb https://github.com/rundeck/rundeck-cli/releases/download/v1.0.22/rundeck-cli_1.0.22-1_all.deb && \
-    echo '2dd77e3ebda708fd80ce4630cc6d5a0a56b51399d35ef2bdf72ece8a2e401ecf  rundeck-cli.deb' > /tmp/rundeck-cli.sig && \
-    shasum -a256 -c /tmp/rundeck-cli.sig && \
     cd - && \
     dpkg -i /tmp/rundeck*.deb && rm /tmp/rundeck*.deb && \
     chown rundeck:rundeck /tmp/rundeck && \
@@ -32,9 +28,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     chown rundeck:rundeck /var/lib/rundeck/.ssh && \
     sed -i "s/export RDECK_JVM=\"/export RDECK_JVM=\"\${RDECK_JVM} /" /etc/rundeck/profile && \
     curl -Lo /var/lib/rundeck/libext/rundeck-slack-incoming-webhook-plugin-0.6.jar https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.6.dev/rundeck-slack-incoming-webhook-plugin-0.6.jar && \
-    echo 'd23b31ec4791dff1a7051f1f012725f20a1e3e9f85f64a874115e46df77e00b5  rundeck-slack-incoming-webhook-plugin-0.6.jar' > /tmp/rundeck-slack-plugin.sig && \
+    curl -Lo /var/lib/rundeck/libext/rundeck-http-plugin-1.0.6.jar https://github.com/ohioit/rundeck-http-plugin/releases/download/1.0.6/rundeck-http-plugin-1.0.6.jar && \
+    curl -Lo /var/lib/rundeck/libext/rundeck-mesos-plugin-0.5.0.jar https://github.com/farmapromlab/rundeck-mesos-plugin/releases/download/v0.5/rundeck-mesos-plugin-0.5.0.jar && \
+    curl -Lo /var/lib/rundeck/libext/rundeck-jdbc-executor-plugin-0.1.jar https://github.com/strdn/rundeck-jdbc-executor-plugin/raw/master/rundeck-jdbc-executor-plugin-0.1.jar && \
     cd /var/lib/rundeck/libext/ && \
-    shasum -a256 -c /tmp/rundeck-slack-plugin.sig && \
     cd - && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
